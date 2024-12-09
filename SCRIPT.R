@@ -4,10 +4,18 @@ setwd("H:/sta215")
 # Install "haven" package 
 install.packages("haven")
 
+# Install "lmtest" package 
+install.packages("lmtest")
+
+# Install "sandwich" package
+install.packages("sandwich")
+
 # Load "haven" package 
 library(haven)
 library(psych)
 library(dplyr)
+library(lmtest)
+library(sandwich)
 
 # Load Rawdata as an object called "data"
 Rawdata <- read.csv("Rawdata.csv")
@@ -118,3 +126,35 @@ hist(residuals(linear_regression))
 # Figure 3
 plot(data$song_length, residuals(linear_regression))
 abline(h=0, col = "red")
+
+# Breush-Pagan Test
+bptest(album_sales ~ song_length, data = data)
+
+# Durbin-Watts Test
+model <- lm(album_sales ~ song_length, data = data)
+dwtest(album_sales ~ song_length, data = data)
+
+# Fit the model
+linear_model <- lm(album_sales ~ song_length, data = data)
+
+# Robust Standard Error t-test
+data <- data.frame(
+  album_sales = c(4, 1, 1, 13, 12, 4.5, 1, 7, 0.5, 0.6, 0.5, 8, 2, 1, 1, 4, 10, 1, 5, 12, 
+                  0.5, 5, 2, 3, 3, 10, 3, 10, 9, 8, 10, 6, 2, 3, 11, 0.5, 7, 6, 8, 4, 4.1, 
+                  4, 0.5, 1, 0.5, 13, 5, 5, 1, 10, 5, 1, 5, 6, 4, 1, 9, 0.5, 3, 3, 4, 9, 13, 
+                  1, 2, 1, 0.5, 9, 10, 1, 6.4, 23, 5, 3, 7, 6, 1, 6, 8, 7, 3, 3, 45, 7, 9, 
+                  30, 9, 1, 1, 10, 30, 3, 5, 66, 28, 30, 10, 3, 3, 1, 1, 1, 8, 6, 3, 1, 1, 1, 
+                  1, 3, 5, 1, 14, 1, 3, 5, 1, 10, 10, 10),
+  song_length = c(281, 233, 259, 326, 199, 215, 340, 242, 348, 291, 246, 204, 262, 280, 235, 171, 
+                  222, 262, 209, 227, 334, 251, 172, 225, 227, 215, 246, 311, 221, 224, 276, 264, 
+                  267, 206, 223, 209, 222, 262, 208, 241, 192, 155, 295, 221, 212, 233, 198, 181, 
+                  257, 217, 198, 212, 258, 219, 212, 243, 192, 234, 245, 213, 334, 210, 263, 172, 
+                  244, 213, 207, 178, 241, 200, 215, 190, 290, 211, 236, 262, 211, 288, 220, 276, 
+                  215, 223, 210, 253, 235, 275, 276, 237, 214, 256, 208, 216, 213, 202, 258, 211, 
+                  250, 266, 264, 263, 241, 190, 245, 270, 227, 242, 175, 215, 258, 236, 210, 216, 
+                  284, 213, 225, 202, 234, 202, 243, 263)
+)
+
+
+robust_t_test <- coeftest(linear_model, vcov = vcovHAC(linear_model))
+print(robust_t_test)
