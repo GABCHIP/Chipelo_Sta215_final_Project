@@ -11,8 +11,10 @@ Instructions: Access the "SCRIPT.R" file for the code used in the analysis.. Ope
 Operationalization of Concepts:
 
 Popularity: Popularity was defined as a song's widespread appeal and operationalized using several measurable factors:
+
 Streams: Total Spotify streams, obtained directly from the platform.
-Album Sales: Certified digital sales from the RIAA. Standard physical sales data were used for 1990s songs without digital metrics.
+
+Album Sales: Certified digital sales from the RIAA. Standard physical sales data were used for 1990s songs without digital metrics.(refers to millions ex. Displayed as 2.4, means 2,400,000 certified units sold).
 
 Gender: A categorical variable with values from 1–9, classifying artist(s) by gender identity. Examples include 1 = women, 2 = men, 3 = nonbinary, etc.
 
